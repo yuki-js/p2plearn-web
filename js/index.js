@@ -228,7 +228,7 @@ const ChangeServer = {
   },
   methods:{
     apply(){
-      localStorage.defaultServer=this.svr||"13.114.98.71:2783"
+      localStorage.defaultServer=this.svr
       window.location.reload()
     }
   }
@@ -515,11 +515,20 @@ const Home = {
   },
   components:{customBar},
   mounted(){
+    if(!localStorage.defaultServer){
+      this.pageStack.pop()
+      this.pageStack.push(ChangeServer)
+      this.$ons.notification.alert("Server is not provided.")
+      return 
+    }
+    
     manager.setRSAKey(localStorage.rsa)
     manager.beginService(localStorage.defaultServer)
     window.addEventListener("load",()=>{
       this.isWV=this.$ons.platform.isWebView()
     })
+
+    
   }
 }
 const UploadFile={
@@ -648,3 +657,8 @@ new Vue({
   }
 })
 
+window.addEventListener('load', function() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('dist/res/serviceWorker.js');
+  }
+});
