@@ -1,0 +1,177 @@
+[data-page=tutorial]{
+  .carItm{
+    text-align:center;
+    img{
+      max-width:200px;
+      max-height:200px;
+    }
+    p{
+      text-align:left;
+      margin:10%;
+    }
+    
+  }
+  .carCtrl{
+    bottom:0;
+    position:absolute;
+    margin:20%;
+    width:60%;
+    ons-toolbar-button{
+      color:white;
+    }
+    .left{
+      position: absolute;
+      left:0;
+    }
+    .right{
+      position: absolute;
+      right:0;
+    }
+  }
+}
+[data-page="search"]{
+  ons-search-input{
+    input{
+      height:100%;
+    }
+    width:100%;
+    height: 100%;
+  }
+  .suggestList ons-list{
+    position:fixed;
+    width:100%;
+  }
+}
+[data-page="contentInfo"]{
+  .contentContainer{
+    padding:10px;
+    font-size:15px;
+  }
+  .name{
+    font-size:1.2em;
+    margin:10px;
+  }
+  .shortDescription{
+    padding:0 10px;
+    color:#454545;
+    font-size:0.9em
+  }
+  .description{
+    padding:0 10px;
+  }
+  .showMore,.showLess{
+    display:block;
+    text-align:center;
+    font-size:1.1em;
+    padding:5px;
+  }
+  .tags{
+    .tagItem{
+      background:white;
+      color:black;
+      border:1px solid #ddd;
+      padding:7px;
+      margin:5px;
+      display: inline-block;
+      box-shadow :1px 1px 3px 0px rgba(0,0,0,0.4);
+      &.locked{
+        background:#fff176;
+        border:none;
+      }
+      &:active{
+        background:#ddd;
+      }
+    }
+  }
+  .actionBtn{
+    text-align:right;
+    padding:10px;
+    
+  }
+}
+[data-page="first"]{
+  .btns{
+    margin:10px;
+    ons-button{
+      margin: 10px 0;
+    }
+  }
+}
+[data-page="generateKey"]{
+  .touchArea{
+    height:50%;
+    background:#889464;
+    color:white;
+    font-size:2em;
+    text-align:center;
+    padding:30% 10%
+  }
+}
+[data-page="userProfile"]{
+  .contentContainer{
+    padding:10px;
+    font-size:15px;
+  }
+  .name{
+    font-size:1.2em;
+    margin:10px;
+  }
+  .description{
+    padding:0 10px;
+  }
+
+}
+[data-page=viewer]{
+    iframe{
+        width:100%;
+        height:99%;
+    }
+}
+[data-page=connectionChart]{
+    ons-list-item{
+        word-break:break-all;
+    }
+}
+
+//json editor
+.jsonHash,.jsonValue,.jsonList{
+    margin-left:20px;
+}
+.editMenu{
+    padding:0px;
+    background:rgba(0,0,0,0.3);
+    margin: 5px 3px 3px 10px;
+    border-radius:5px;
+    width:40px;
+    &.add{
+        transition-duration:180ms;
+        a{
+            margin:0px;
+            border-radius:0px;
+            padding:3px;
+            color:white;
+            display:inline-block;
+        }
+        .openAdd{
+            
+        }
+        .addValue{
+            background:#114514
+        }
+        .addHash{
+            background:#810893
+        }
+        .addList{
+            background:#040298
+        }
+        span{
+            display:none;
+        }
+        &.open{
+            span{
+                display:inline;
+            }
+            width:300px;
+        }
+    }
+}
