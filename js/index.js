@@ -1,3 +1,9 @@
+/*
+コードを分割しないのはよろしくないが、
+私はEmacs狂信者だが、Vue.jsで推奨される書き方である単一ファイルコンポーネントを、js2-mode,Emmet-mode,scss-mode,Tern auto completeで、立派なシンタックスハイライトをつけて書くという欲張りはできないようだ。
+よって、templateをindex.htmlに直書きし、index.jsにコンポーネントを全て書くということになっているが、お許しください。
+*/
+
 const cryptico = require("cryptico")
 const dataTransporter = [];//use only push() pop() dataTransporter[index]
 var customBar = {//for safari
@@ -282,6 +288,8 @@ const First = {
     },
     goToUseKey(){
       this.pageStack.push(UseKey)
+    }, goToTutorial(){
+      this.pageStack.push(Tutorial);
     }
   }
 }
@@ -657,7 +665,7 @@ new Vue({
   }
 })
 
-window.addEventListener('load', function() {
+window.addEventListener('load', function() {//Progressive Web App対応
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('dist/res/serviceWorker.js');
   }

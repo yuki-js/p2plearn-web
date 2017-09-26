@@ -24,23 +24,23 @@
       <v-ons-page data-page="home">
         <custom-bar title="Home"></custom-bar>
         <p style="text-align:center">
-          <v-ons-button modifier="" @click="goToSearch">
+          <v-ons-button modifier="cute" @click="goToSearch">
             <v-ons-icon icon="fa-search"></v-ons-icon>
             Search
           </v-ons-button>
-          <v-ons-button @click="goToCollection">
+          <v-ons-button modifier="cute"  @click="goToCollection">
             <v-ons-icon icon="ion-ios-book"></v-ons-icon>
             Collection
           </v-ons-button>
-          <v-ons-button @click="goToOther">
+          <v-ons-button modifier="cute" @click="goToOther">
             <v-ons-icon icon="ion-more"></v-ons-icon>
             Other
           </v-ons-button>
-          <v-ons-button @click="goToUpload">
+          <v-ons-button modifier="cute" @click="goToUpload">
             <v-ons-icon icon="ion-upload"></v-ons-icon>
             Upload
           </v-ons-button>
-          <v-ons-button @click="goToMyProfile">
+          <v-ons-button modifier="cute" @click="goToMyProfile">
             <v-ons-icon icon="ion-person"></v-ons-icon>
             My Profile
           </v-ons-button>
@@ -56,12 +56,6 @@
             <div class="title">Go to Learn language</div>
             <div class="content">Click to go</div>
           </v-ons-card>
-
-          <v-ons-card>
-            
-            <div class="title">SSL is supported!</div>
-            <div class="content">At the same time,I got a domain of "勉強.ga" If you can't connect to server,try to change server "https://勉強.ga/" or "https://勉強.ga:2783"</div>
-          </v-ons-card>
         </div>
       </v-ons-page>
     </template>
@@ -71,6 +65,14 @@
         <v-ons-carousel fullscreen swipeable auto-scroll overscrollable :index.sync="carIndex">
           <tutorial-item image="dist/res/tutorial/1.png" bg-color="#810893" text-color="white">このアプリは、皆さんの勉強をお互いに助け合うことを目的としたアプリです。</tutorial-item>
           <tutorial-item image="dist/res/tutorial/2.png" bg-color="#114514" text-color="white">投稿された勉強に役立つコンテンツを探して、広告を見たあと、学習できます。</tutorial-item>
+          <tutorial-item image="dist/res/tutorial/3.png" bg-color="#fffc7f" text-color="black">このアプリ自身が秘密鍵を生成します。これは今までのパスワードに相当するものですが、外部にいかなる形でも送信されません。この鍵で、ユーザ確認と、コンピュータの識別と、データの暗号化を同時に行います。</tutorial-item>
+          <tutorial-item image="dist/res/tutorial/5.png" bg-color="#b50018" text-color="white">秘密鍵の保存に、13個の英単語でできたパスフレーズを利用します。従来の機種変更コードに当たるものです。これを紛失、盗難してしまった場合、あなたの全てのデータも紛失、盗難します。</tutorial-item>
+          <tutorial-item image="dist/res/tutorial/4.png" bg-color="#b50018" text-color="white">
+            パスフレーズは紙に書いて、その紙を他人に見られないような場所に保管してください。<br>
+            絶対にスクリーンショット、コピーアンドペーストによって保存しないでください！
+            鍵を生成する前に、画面を見られていないかどうかを確認してください。
+            
+          </tutorial-item>
         </v-ons-carousel>
         <div class="carCtrl">
           <div class="left">
@@ -81,8 +83,8 @@
             </v-ons-toolbar-button>
           </div>
           <div class="right">
-            <v-ons-toolbar-button @click="carIndex>=1 ? back():carIndex++">
-              <span v-show="carIndex>=1">Exit</span>
+            <v-ons-toolbar-button @click="carIndex>=4 ? back():carIndex++">
+              <span v-show="carIndex>=4">Exit</span>
               <v-ons-icon icon="ion-ios-arrow-forward"></v-ons-icon>
             </v-ons-toolbar-button>
           </div>
@@ -168,8 +170,15 @@
       <v-ons-page id="changeServer">
         <custom-bar title="Change Server"></custom-bar>
         <div>
-          Type the address to the server.
-          In many case,you may type "勉強.ga"
+          Choose or specify the address to the server.
+
+          <v-ons-list>
+            <v-ons-list-item @click='svr = "https://勉強.ga"'>https://勉強.ga</v-ons-list-item>
+            <v-ons-list-item @click='svr = "https://勉強.ga:2783"'>https://勉強.ga:2783</v-ons-list-item>
+            <v-ons-list-item @click='svr = "http://勉強.ga"'>http://勉強.ga</v-ons-list-item>
+            <v-ons-list-item @click='svr = "https://p2plearn.herokuapp.com/"'>https://p2plearn.herokuapp.com/</v-ons-list-item>
+          </v-ons-list>
+          
           <v-ons-input v-model="svr" placeholder="HOST:PORT"></v-ons-input>
           <v-ons-button @click="apply">Apply & Reload</v-ons-button>
         </div>
@@ -273,9 +282,10 @@
       <v-ons-page data-page="first">
         <custom-bar title="Welcome!"></custom-bar>
         <div class="btns">
-          <p>Do you have any keys?</p>
+          <p>Have you ever used this app?</p>
           <v-ons-button modifier="large cta" @click="goToUseKey">Yes.I use an existing key.</v-ons-button>
           <v-ons-button modifier="large" @click="goToGenKey">No.Create new one.</v-ons-button>
+          <v-ons-button modifier="quiet" @click="goToTutorial">鍵についての説明を読む(Japanese)</v-ons-button>
         </div>
       </v-ons-page>
     </template>

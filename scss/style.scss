@@ -175,3 +175,17 @@
         }
     }
 }
+[data-page=home]{
+  .button--cute{
+    width:110px;
+    height: 110px;
+
+    margin:10px;
+    background-color:#ff521a;
+    .ons-icon{
+      font-size:80px;
+      display:block;
+      line-height: 80px;
+    }
+  }
+}
