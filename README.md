@@ -17,7 +17,7 @@ Following server are available:
 1. clone this repository
 1. `$ cd path/to/p2plearn-web`
 1. `$ npm install`
-1. `$ gulp`
+1. `$ npm start`
 1. launch index.html
 
 ## License

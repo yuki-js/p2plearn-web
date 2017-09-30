@@ -17,7 +17,7 @@ https://github.com/yuki-js/p2plearn-server
 1. このリポジトリをクローン
 1. `$ cd path/to/p2plearn-web`
 1. `$ npm install`
-1. `$ gulp`
+1. `$ npm start`
 1.  index.htmlを開く
 
 ## ライセンス
