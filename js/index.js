@@ -89,7 +89,8 @@ const Collection = {
   components:{customBar},
   data(){
     return {
-      items:[]
+      items:[],
+      timedout:false
     }
   },
   mounted(){
@@ -101,9 +102,13 @@ const Collection = {
       dataTransporter.push(contentId);
     },
     getCollection(){
+      this.timedout=false;
       manager.getCollection().then(res=>{
         this.items = res
       })
+      setTimeout(()=>{
+        this.timedout=true;
+      },9000);
     }
   }
 }
@@ -234,6 +239,7 @@ const ChangeServer = {
   },
   methods:{
     apply(){
+      if(!this.svr){return;}
       localStorage.defaultServer=this.svr
       window.location.reload()
     }
@@ -549,11 +555,16 @@ const UploadFile={
         tags:["","","",""],
         adInfo:"",
         name:""
-      }
+      },
+      uploading:false
     }
   },
   methods:{
     upload(){
+      if(!(this.uploadData.description.length&&this.uploadData.name.length&&this.uploadData.tags[0].length&&this.$refs.file.files&&this.$refs.file.files.length&&!this.uploading)){
+        this.$ons.notification.toast("Please fill in name,tag 1,description,file",{timeout:3000});
+      }
+      this.uploading=true;
       const reader=new FileReader()
       reader.onload=(e)=>{
         let tags=[]
@@ -568,6 +579,8 @@ const UploadFile={
           body:e.target.result,
           name:this.uploadData.name
         })
+        this.pageStack.pop();
+        this.$ons.notification.toast("Uploaded!",{timeout:3000});
       }
       reader.readAsDataURL(this.$refs.file.files[0])
     }
