@@ -45,18 +45,7 @@
             My Profile
           </v-ons-button>
         </p>
-        <div>
-          <v-ons-card v-if="isWV">
-            <div class="title">Get Learn language App</div>
-            <div class="content"></div>
-          </v-ons-card>
-          
-          <v-ons-card @click="goToLearnLang" v-else>
-            
-            <div class="title">Go to Learn language</div>
-            <div class="content">Click to go</div>
-          </v-ons-card>
-        </div>
+        
       </v-ons-page>
     </template>
 
@@ -119,7 +108,7 @@
               </v-ons-list>
             </v-ons-col>
           </v-ons-row>
-          <v-ons-progress-bar indeterminate v-show="loading"></v-ons-progress-bar>
+          <v-ons-progress-bar indeterminate v-show="loading&&!timedout"></v-ons-progress-bar>
           <div>
             <v-ons-list>
               <v-ons-list-item modifier="tappable" v-for="i in result" @click="goToContentDetail(i.id)">
@@ -129,7 +118,8 @@
               </v-ons-list-item>
               
             </v-ons-list>
-            <p class="hint" v-show="result.length===0">
+            <p class="hint" v-if="result.length==0&&!loading&&timedout">Not found.Please add post here!</p>
+            <p class="hint" v-show="result.length===0&&!timedout">
               Hint: "#古典" to search 古典 tag
             </p>
           </div>
@@ -199,7 +189,7 @@
             <div class="actionBtn">
               <v-ons-button v-if="!content.user.hasThisItem" @click="addThisToCollection">
                 <v-ons-icon icon="ion-plus"></v-ons-icon>
-                Add to collection
+                Open/Add to collection
               </v-ons-button>
               <v-ons-button v-if="content.user.hasThisItem && content.file.downloadable && !content.user.hasDownloaded" @click="download">
                 <v-ons-icon icon="fa-download"></v-ons-icon>
@@ -299,7 +289,8 @@
         <custom-bar title="Generate key"></custom-bar>
         <div class="touchArea" ref="touchArea">
           <p v-show="cnt<13">
-            Swipe many times to improve security.<br>
+            Swipe here many times to improve security.<br>
+            <small v-hide="isPhone">Click and drag here.</small>
             <small v-show="sensorAvailable">Or shake your device</small>
           </p>
           <p v-show="cnt>=13">Calculating.<br><small>This might take a few minutes</small></p> 

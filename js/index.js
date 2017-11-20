@@ -38,6 +38,7 @@ const Search = {
       focus:true,
       loading:false,
       showSuggest:true,
+      timedout:false
     }
   },
   mounted(){
@@ -50,13 +51,15 @@ const Search = {
   methods:{
     search(){
       this.loading=true;
+      this.timedout=false;
       
-
       manager.search(P2PManager.createSearchCond(this.searchText)).then((res)=>{
         this.result=res.result;
         this.suggest=[]
         this.showSuggest=false
         this.loading=false;
+      },()=>{
+        this.timedout=true;
       })
     },
     goToContentDetail(cId){
@@ -105,10 +108,9 @@ const Collection = {
       this.timedout=false;
       manager.getCollection().then(res=>{
         this.items = res
-      })
-      setTimeout(()=>{
+      },()=>{
         this.timedout=true;
-      },9000);
+      });
     }
   }
 }
@@ -385,6 +387,7 @@ const NoteKey = {
     })
   }
 }
+const ua = navigator.userAgent;
 const GenerateKey = {
   template:"#generateKey",  props:["pageStack"],
   components:{customBar},
@@ -393,7 +396,8 @@ const GenerateKey = {
       cnt:0,
       next:false,
       keyArray:[],
-      sensorAvailable:false
+      sensorAvailable:false,
+      isPhone:(ua.indexOf("iPad") >= 0 || ua.indexOf("iPhone") >= 0 || ua.indexOf("iPod") >= 0 || ua.indexOf("Android") >= 0 || ua.indexOf("Windows Phone") >= 0)
     }
   },
   methods:{
@@ -637,16 +641,6 @@ const ConnectionChart = {
   data(){
     return {
       myConnectionList:manager.service.myConnectionList
-    }
-  }
-}
-const EditJson = {
-  template:"#editJson",
-  props:["pageStack"],
-  components:{jsonHash:require("./jsonEditor").jsonHash},
-  methods:{
-    log(){
-      debugger
     }
   }
 }
