@@ -376,7 +376,7 @@ const NoteKey = {
   methods:{
     done(){
       localStorage.seed=this.rsaData.key.join(",")
-      localStorage.rsa=JSON.stringify(this.rsaData.rsa.toJSON())
+      localStorage.privKey=JSON.stringify(this.rsaData.rsa.toJSON())
       localStorage.publicKey=this.rsaData.pubKey
       this.pageStack.push(ChangeServer)
     },
@@ -488,7 +488,7 @@ const UseKey = {
         const j =arr.join(",")
         const k=P2PManager.generateRSAKeyFromSeed(j)
         localStorage.seed=j
-        localStorage.rsa=JSON.stringify(k)
+        localStorage.privKey=JSON.stringify(k)
         localStorage.publicKey=cryptico.publicKeyString(k)
         this.pageStack.push(ChangeServer)
       })
@@ -540,7 +540,7 @@ const Home = {
       return 
     }
     
-    manager.setRSAKey(localStorage.rsa)
+    manager.setKey(localStorage.privKey)
     manager.beginService(localStorage.defaultServer)
     window.addEventListener("load",()=>{
       this.isWV=this.$ons.platform.isWebView()
@@ -648,7 +648,7 @@ Vue.use(VueOnsen)
 new Vue({
   el:"#app",
   data(){
-    if(localStorage.rsa){
+    if(localStorage.privKey){
       return {
         pageStack:[Home]
       }
