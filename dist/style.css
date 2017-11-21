@@ -28,6 +28,11 @@
 [data-page="uploadFile"] ons-input {
   width: 100%; }
 
+[data-page="uploadFile"] .addTag {
+  color: #666; }
+  [data-page="uploadFile"] .addTag ons-icon {
+    padding: 10px; }
+
 [data-page="search"] ons-search-input {
   width: 100%;
   height: 100%; }

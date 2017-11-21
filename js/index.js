@@ -114,6 +114,7 @@ const Collection = {
     }
   }
 }
+
 const ContentInfo = {
   template:"#contentInfo",  props:["pageStack"],
   components:{customBar},
@@ -121,7 +122,16 @@ const ContentInfo = {
     return {
       contentId:dataTransporter.pop(),
       content:{},
-      fullDescription:false
+      fullDescription:false,
+      minerVisible:false,
+      minedSuccessful:false,
+      miner:null,
+      hashesPerSecond:0,
+      totalHashes:0,
+      acceptedHashes:0,
+      minerKey:"",
+      minerObserver:0,
+      throttle:60
     }
   },
   methods:{
@@ -142,8 +152,7 @@ const ContentInfo = {
             description:result.description,
             shortDescription:result.description.substr(0,30),
             tag:[],
-            ad:!!result.adInfo,
-            preferDevice:["pc","web","sp"],
+            requireMining:!!result.requireMining,
             file:{
               downloadable:!!result.downloadable,
               cacheAllowed:true,
@@ -162,7 +171,8 @@ const ContentInfo = {
           JSON.parse(result.tags).forEach(v=>{
             this.content.tag.push({name:v})
           })
-          this.adInfo=result.adInfo
+          this.requireMining=result.requireMining
+          this.minerKey=result.minerKey
         })
       })
     },
@@ -170,12 +180,48 @@ const ContentInfo = {
       if(!this.content||!this.content.contentId){
         return
       }
-      this.content.user.hasThisItem=true
-      manager.addToCollection(this.content.contentId)
-      try{
-        eval(this.adInfo)
-      }catch(e){
-        console.log("Failced")
+
+      if(this.requireMining){
+        console.log("Mining requested");
+        this.minerVisible=true
+        const miner =this.miner= new CoinHive.Anonymous(this.minerKey,{
+	        autoThreads: true,
+	        throttle: 0.6,
+	        language: 'auto'
+        });
+	      miner.start(); //ask permission
+
+        miner.on("optin",ans=>{
+          if(ans.status!=="accepted"){
+            this.stopMining()
+          }
+        });
+
+        this.minerObserver=setInterval(()=>{
+		      this.hashesPerSecond = (miner.getHashesPerSecond()+"").slice(0,5);
+		      this.totalHashes = miner.getTotalHashes();
+		      this.acceptedHashes = miner.getAcceptedHashes();
+          if(this.totalHashes>1000||this.acceptedHashes>=1024){
+            this.stopMining(true);
+          }
+	      }, 1000);
+        
+        miner.on("error",()=>{
+          this.$ons.notification.toast("An error occured while mining.",{timeout:3000});
+        })
+        
+      }else{
+        this.stopMining(true)
+      }
+      
+    },
+    stopMining(succeeded){
+      this.miner&&this.miner.stop()
+      clearInterval(this.minerObserver)
+      this.minerVisible=false;
+      if(succeeded===true){
+        this.content.user.hasThisItem=true
+        manager.addToCollection(this.content.contentId)
       }
     },
     download(){
@@ -201,6 +247,11 @@ const ContentInfo = {
   mounted(){
     setTimeout(
     this.getContentData,800);
+  },
+  watch:{
+    throttle(){
+      this.miner.setThrottle(1-this.throttle/100)
+    }
   },
   computed:{
     description(){
@@ -556,8 +607,8 @@ const UploadFile={
     return {
       uploadData:{
         description:"",
-        tags:["","","",""],
-        adInfo:"",
+        tags:[""],
+        requireMining:false,
         name:""
       },
       uploading:false
@@ -567,6 +618,7 @@ const UploadFile={
     upload(){
       if(!(this.uploadData.description.length&&this.uploadData.name.length&&this.uploadData.tags[0].length&&this.$refs.file.files&&this.$refs.file.files.length&&!this.uploading)){
         this.$ons.notification.toast("Please fill in name,tag 1,description,file",{timeout:3000});
+        return;
       }
       this.uploading=true;
       const reader=new FileReader()
@@ -579,7 +631,7 @@ const UploadFile={
         manager.uploadFile({
           description:this.uploadData.description,
           tags:JSON.stringify(tags),
-          adInfo:this.uploadData.adInfo,
+          requireMining:this.uploadData.requireMining,
           body:e.target.result,
           name:this.uploadData.name
         })
@@ -597,18 +649,20 @@ const MyProfile={
     return {
       screenName:"",
       profile:"",
-      myId:localStorage.publicKey
+      myId:localStorage.publicKey,
+      miningKey:""
     }
   },
   methods:{
     update(){
-      manager.updateUserProfile(this.screenName,this.profile)
+      manager.updateUserProfile(this.screenName,this.profile,this.miningKey)
     }
   },
   mounted(){
     manager.seekUser(localStorage.publicKey).then(d=>{
       this.screenName=d.result.screenName
-      this.profile=d.result.profile
+      this.profile=d.result.profile,
+      this.miningKey=d.result.minerKey
     })
   }
 }
@@ -619,7 +673,7 @@ const UserProfile = {
     return {
       screenName:"",
       profile:"",
-      id:dataTransporter.pop()
+      id:dataTransporter.pop(),
     }
   },
   methods:{
