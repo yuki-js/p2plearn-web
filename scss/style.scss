@@ -37,6 +37,12 @@
   ons-input{
     width:100%;
   }
+  .addTag{
+    color:#666;
+    ons-icon{
+      padding:10px;
+    }
+  }
 }
 [data-page="search"]{
   ons-search-input{
