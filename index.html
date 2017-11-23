@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <title>P2P Learn</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="dist/normalize.min.js">
-
     <link rel='stylesheet' href='dist/onsenui/css/onsenui.min.css'>
     <link rel='stylesheet' href='dist/onsenui/css/onsen-css-components.min.css'>
     <link rel="stylesheet" href="dist/style.css">
   </head>
-
   <body>
     <div id="app"></div>
     <!--Vue単一なんとかファイルをEmacs js2-mode Emmet yasnippet scss-modeを使って書くというわがままをできないから全部テンプレゆるして-->
@@ -19,7 +16,6 @@
         <component :is="page" v-for="page in pageStack" :page-stack="pageStack" @push="pageStack = [...pageStack, $event]"></component>
       </v-ons-navigator>
     </template>
-
     <template id="home">
       <v-ons-page data-page="home">
         <custom-bar title="Home"></custom-bar>
@@ -45,10 +41,8 @@
             My Profile
           </v-ons-button>
         </p>
-        
       </v-ons-page>
     </template>
-
     <template id="tutorial">
       <v-ons-page data-page="tutorial">
         <v-ons-carousel fullscreen swipeable auto-scroll overscrollable :index.sync="carIndex">
@@ -58,9 +52,8 @@
           <tutorial-item image="dist/res/tutorial/5.png" bg-color="#b50018" text-color="white">秘密鍵の保存に、13個の英単語でできたパスフレーズを利用します。従来の機種変更コードに当たるものです。これを紛失、盗難してしまった場合、あなたの全てのデータも紛失、盗難します。</tutorial-item>
           <tutorial-item image="dist/res/tutorial/4.png" bg-color="#b50018" text-color="white">
             パスフレーズは紙に書いて、その紙を他人に見られないような場所に保管してください。<br>
-            絶対にスクリーンショット、コピーアンドペーストによって保存しないでください！
+            絶対にスクリーンショット、コピーアンドペーストによって保存しないでください！<br>
             鍵を生成する前に、画面を見られていないかどうかを確認してください。
-            
           </tutorial-item>
           <tutorial-item image="dist/res/tutorial/6.png" bg-color="#1e88e5" text-color="white">
             <h1>はじめかた</h1>
@@ -100,7 +93,6 @@
           <p>
             <slot></slot>
           </p>
-
         </div>
       </v-ons-carousel-item>
     </template>
@@ -129,14 +121,12 @@
                   <span class="list-item__title">{{i.name}}</span><span class="list-item__subtitle">{{i.description}}</span>
                 </div>
               </v-ons-list-item>
-              
             </v-ons-list>
             <p class="hint" v-if="result.length==0&&!loading&&timedout">Not found.Please add a post here!</p>
             <p class="hint" v-show="result.length===0&&!timedout">
               Hint: "#古典" to search posts which have "古典" tag
             </p>
           </div>
-          
         </div>
       </v-ons-page>
     </template>
@@ -375,15 +365,12 @@
           <p v-show="again">Words is incorrect.Try again.</p>
           <v-ons-button modifier="large" @click="next">Next</v-ons-button>
         </div>
-        
       </v-ons-page>
     </template>
-
     <template id="uploadFile">
       <v-ons-page data-page="uploadFile">
         <custom-bar title="Upload File"></custom-bar>
         <div>
-          
           <v-ons-list>
             <v-ons-list-header>Name:</v-ons-list-header>
             <v-ons-list-item><v-ons-input placeholder="Name" v-model="uploadData.name"></v-ons-input></v-ons-list-item>
@@ -426,7 +413,6 @@
         </div>
       </v-ons-page>
     </template>
-
     <template id="userProfile">
       <v-ons-page data-page="userProfile">
         <custom-bar :title="screenName||'Loading...'"></custom-bar>
@@ -459,13 +445,10 @@
         </div>
       </v-ons-page>
     </template>
-    
-    
-    <script src="cordova.js"></script>
+<script src="cordova.js"></script>
     <script src="dist/vue.min.js"></script>
     <script src='dist/onsenui/js/onsenui.min.js'></script>
     <script src='dist/onsenui/vue-onsenui.min.js'></script>
-    
     <script src="dist/main.js"></script>
     <script src="https://authedmine.com/lib/authedmine.min.js" async></script>
   </body>
