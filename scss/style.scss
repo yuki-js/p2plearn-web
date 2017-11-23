@@ -63,9 +63,11 @@
   } 
 }
 [data-page="collection"]{
-  color: #606060;
-  text-shadow: 0px 1px 1px rgba(147, 147, 147, 0.43);
-  text-align:center;
+  .hint{
+    color: #606060;
+    text-shadow: 0px 1px 1px rgba(147, 147, 147, 0.43);
+    text-align:center;
+  }
 }
 
 

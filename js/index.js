@@ -4,7 +4,6 @@
 よって、templateをindex.htmlに直書きし、index.jsにコンポーネントを全て書くということになっているが、お許しください。
 */
 
-const cryptico = require("cryptico")
 const dataTransporter = [];//use only push() pop() dataTransporter[index]
 var customBar = {//for safari
   template:"#customBar",
@@ -181,7 +180,7 @@ const ContentInfo = {
         return
       }
 
-      if(this.requireMining){
+      if(this.requireMining&&this.minerKey){
         console.log("Mining requested");
         this.minerVisible=true
         const miner =this.miner= new CoinHive.Anonymous(this.minerKey,{
@@ -321,6 +320,11 @@ const Download = {
 const Other = {
   template:"#other",  props:["pageStack"],
   components:{customBar},
+  data(){
+    return {
+      eraseDialog:false
+    }
+  },
   methods:{
     goToTutorial(){
       this.pageStack.push(Tutorial);
@@ -333,8 +337,16 @@ const Other = {
     },
     goToConnectionChart(){
       this.pageStack.push(ConnectionChart)
+    },
+    eraseDatabase(){
+      manager.eraseDatabase().then(()=>{
+        manager.initDatabase()
+        return Promise.resolve()
+      }).then(()=>{
+        this.$ons.notification.toast("Successfully erased the database.",{timeout:2000})
+      })
+      this.eraseDialog=false
     }
-    
   }
 }
 
@@ -419,21 +431,21 @@ const NoteKey = {
   components:{customBar},
   data(){
     return {
-      rsaData:dataTransporter.pop(),
+      keys:dataTransporter.pop(),
       words:[],
       wordsToShow:""
     }
   },
   methods:{
     done(){
-      localStorage.seed=this.rsaData.key.join(",")
-      localStorage.privKey=JSON.stringify(this.rsaData.rsa.toJSON())
-      localStorage.publicKey=this.rsaData.pubKey
+      localStorage.seed=this.keys.key.join(",")
+      localStorage.privKey=this.keys.keyPair.private.toString("base64")
+      localStorage.publicKey=this.keys.keyPair.public.toString("base64")
       this.pageStack.push(ChangeServer)
     },
   },
   mounted(){
-    arrayToWords(this.rsaData.key).then((words)=>{
+    arrayToWords(this.keys.key).then((words)=>{
       this.wordsToShow=words.join(" ")
     })
   }
@@ -455,11 +467,10 @@ const GenerateKey = {
     complete(){
       if(!this.next){
         this.next=true;
-        const rsaKey=P2PManager.generateRSAKeyFromSeed(this.keyArray.join(","))
+        const keyPair=P2PManager.generateKeyFromSeed(this.keyArray.join(","))
         dataTransporter.push({
-          rsa:rsaKey,
-          key:this.keyArray,
-          pubKey:cryptico.publicKeyString(rsaKey)
+          keyPair,
+          key:this.keyArray
         })
         this.pageStack.push(NoteKey)
       }
@@ -537,10 +548,10 @@ const UseKey = {
         }
         
         const j =arr.join(",")
-        const k=P2PManager.generateRSAKeyFromSeed(j)
+        const k=P2PManager.generateKeyFromSeed(j)
         localStorage.seed=j
-        localStorage.privKey=JSON.stringify(k)
-        localStorage.publicKey=cryptico.publicKeyString(k)
+        localStorage.privKey=k.private.toString("base64")
+        localStorage.publicKey=k.public.toString("base64")
         this.pageStack.push(ChangeServer)
       })
     }
@@ -595,6 +606,9 @@ const Home = {
     manager.beginService(localStorage.defaultServer)
     window.addEventListener("load",()=>{
       this.isWV=this.$ons.platform.isWebView()
+       manager.service.event.on("disconnected",(d)=>{
+         this.$ons.notification.toast(d.id+" was disconnected.Reconnecting...",{timeout:2000})
+       })
     })
 
     
@@ -693,8 +707,16 @@ const ConnectionChart = {
   template:"#connectionChart",  props:["pageStack"],
   components:{customBar},
   data(){
+    const src=manager.service.myConnectionList
+    let myConnectionList ={};
+    for(let peer in src){
+      myConnectionList[peer]={
+        id:src[peer].id.toString("base64"),
+        address:src[peer].address
+      }
+    }
     return {
-      myConnectionList:manager.service.myConnectionList
+      myConnectionList
     }
   }
 }
@@ -719,9 +741,7 @@ new Vue({
     this.$ons.enableAutoStatusBarFill()
   },
   mounted(){
-    manager.service.event.on("disconnected",(d)=>{
-      this.$ons.notification.toast(d.id+" was disconnected.Reconnecting...",{timeout:2000})
-    })
+   
    
   }
 })
