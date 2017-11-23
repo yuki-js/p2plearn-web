@@ -49,6 +49,7 @@ const Search = {
   components:{customBar},
   methods:{
     search(){
+      if(!this.searchText){return }
       this.loading=true;
       this.timedout=false;
       

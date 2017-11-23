@@ -62,6 +62,19 @@
             鍵を生成する前に、画面を見られていないかどうかを確認してください。
             
           </tutorial-item>
+          <tutorial-item image="dist/res/tutorial/6.png" bg-color="#1e88e5" text-color="white">
+            <h1>はじめかた</h1>
+            パスフレーズをバックアップしている場合は"Yes.I use an existing key." <br/>
+            初めて使用する場合、バックアップをしていない場合、"No.Create new one." <br/>
+            を押す
+          </tutorial-item>
+          <tutorial-item image="dist/res/tutorial/7.png" bg-color="#00acc1" text-color="white">緑色の領域の上でできるだけ複雑にドラッグ または スワイプします</tutorial-item>
+          <tutorial-item image="dist/res/tutorial/8.png" bg-color="#009688" text-color="white">英単語を紙に書いて保存します。英単語を書いた紙の保存方法に気をつけましょう。</tutorial-item>
+          <tutorial-item image="dist/res/tutorial/9.png" bg-color="#3949ab" text-color="white">サーバーを選択 または 入力して、Apply & Reload をクリックします</tutorial-item>
+          <tutorial-item image="dist/res/tutorial/10.png" bg-color="#558b2f" text-color="white">ホーム画面が表示されれば設定完了です。</tutorial-item>
+          <tutorial-item image="dist/res/tutorial/11.png" bg-color="#d84315" text-color="white">
+            <h1>検索・閲覧</h1>
+            検索ボックスにキーワードを入力し、右の虫眼鏡ボタンをクリックして</tutorial-item><tutorial-item image="dist/res/tutorial/13.png" bg-color="#ef6c00" text-color="white">"Open/Add to collection" をクリック</tutorial-item><tutorial-item image="dist/res/tutorial/12.png" bg-color="#f57f17" text-color="white">閲覧・ダウンロードができます。</tutorial-item><tutorial-item image="dist/res/tutorial/14.png" bg-color="#607d8b" text-color="white">マイニングが必要な投稿は、マイニングを許可してください。</tutorial-item><tutorial-item image="dist/res/tutorial/15.png" bg-color="#5e4475" text-color="white"><h1>アップロード方法</h1>名称、タグ、説明文を入力し、アップロードするファイルを選択します。大きいファイルでは、時間がかかることがあります。</tutorial-item>
         </v-ons-carousel>
         <div class="carCtrl">
           <div class="left">
@@ -72,8 +85,8 @@
             </v-ons-toolbar-button>
           </div>
           <div class="right">
-            <v-ons-toolbar-button @click="carIndex>=4 ? back():carIndex++">
-              <span v-show="carIndex>=4">Exit</span>
+            <v-ons-toolbar-button @click="carIndex>=14 ? back():carIndex++">
+              <span v-show="carIndex>=13">Exit</span>
               <v-ons-icon icon="ion-ios-arrow-forward"></v-ons-icon>
             </v-ons-toolbar-button>
           </div>
@@ -424,8 +437,7 @@
             <div class="description" v-html="profile">
               
             </div>
-            <p>User ID is:<br>
-                {{id}}</p>
+            <p>User ID:<input disabled="true" type="text" :value="id" /></p>
           </div>
           <v-ons-progress-bar indeterminate v-else></v-ons-progress-bar>
         </div>
