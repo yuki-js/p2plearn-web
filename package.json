@@ -28,7 +28,9 @@
     "websql": "^0.4.4",
     "ws": "^3.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp-htmlmin": "^3.0.0"
+  },
   "scripts": {
     "start": "./node_modules/gulp/bin/gulp.js"
   },

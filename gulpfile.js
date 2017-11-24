@@ -9,6 +9,7 @@ var browserify = require("browserify")
 var source = require('vinyl-source-stream');
 var buffer = require("vinyl-buffer")
 var uglify =require("gulp-uglify")
+var htmlmin = require('gulp-htmlmin');
 
 gulp.task('js-prod', function(){
   browserify({
@@ -45,6 +46,11 @@ gulp.task('js-dev', function(){
     //.pipe(uglify())
     .pipe(gulp.dest('dist/'));
 });
+gulp.task("html",function(){
+  return gulp.src('html/index.html')
+    .pipe(htmlmin({collapseWhitespace: true}))
+    .pipe(gulp.dest('./'));
+})
 
 
 gulp.task("sass", function() {
@@ -57,10 +63,11 @@ gulp.task("sass", function() {
 gulp.task("watch", function() {
   gulp.watch("scss/*.scss",["sass"]);
   gulp.watch("js/**/*.js",["js-dev"]);
+  gulp.watch("html/index.html",["html"]);
 });
 gulp.task("default", function(cb) {
   return runSequence(
-    ['sass',"js-dev"],
+    ['sass',"js-dev","html"],
     'watch',
     cb
   );
@@ -68,7 +75,7 @@ gulp.task("default", function(cb) {
 });
 gulp.task("prod", function(cb) {
   return runSequence(
-    ['sass',"js-prod"],
+    ['sass',"js-prod","html"],
     cb
   );
   

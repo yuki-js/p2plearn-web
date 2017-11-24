@@ -5,7 +5,7 @@
 */
 
 const dataTransporter = [];//use only push() pop() dataTransporter[index]
-var customBar = {//for safari
+const customBar = {
   template:"#customBar",
   props:["pageStack","title"]
 }
@@ -339,6 +339,10 @@ const Other = {
     goToConnectionChart(){
       this.pageStack.push(ConnectionChart)
     },
+    goToPassphrase(){
+      this.dataTransporter=[]
+      this.pageStack.push(NoteKey)
+    },
     eraseDatabase(){
       manager.eraseDatabase().then(()=>{
         manager.initDatabase()
@@ -431,8 +435,10 @@ const NoteKey = {
   template:"#noteKey",  props:["pageStack"],
   components:{customBar},
   data(){
+    const keysData=dataTransporter.pop()||null;
     return {
-      keys:dataTransporter.pop(),
+      keys:keysData,
+      keyGenerated:keysData&&keysData.key,
       words:[],
       wordsToShow:""
     }
@@ -446,9 +452,15 @@ const NoteKey = {
     },
   },
   mounted(){
-    arrayToWords(this.keys.key).then((words)=>{
-      this.wordsToShow=words.join(" ")
-    })
+    if(this.keyGenerated){
+      arrayToWords(this.keys.key).then((words)=>{
+        this.wordsToShow=words.join(" ")
+      })
+    }else{
+      arrayToWords(localStorage.seed.split(",")).then((words)=>{
+        this.wordsToShow=words.join(" ")
+      })
+    }
   }
 }
 const ua = navigator.userAgent;
